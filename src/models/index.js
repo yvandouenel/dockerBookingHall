@@ -14,7 +14,11 @@ const connectWithRetry = async () => {
                 dialect: dbConfig.DIALECT,
                 port: dbConfig.PORT,
                 pool: dbConfig.pool,
-                logging: false
+                logging: false,
+                define: {
+                    charset: 'utf8mb4',
+                    collate: 'utf8mb4_unicode_ci'
+                }
             });
 
             await sequelize.authenticate();
@@ -41,7 +45,6 @@ const connectWithRetry = async () => {
                 throw error;
             }
             currentTry++;
-            // Attendre 5 secondes avant de réessayer
             await new Promise(resolve => setTimeout(resolve, 5000));
         }
     }
