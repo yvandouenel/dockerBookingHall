@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  appbookinghall:
+    build: .
+    container_name: appbookinghall
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/usr/src/app/src
+      - ./server.js:/usr/src/app/server.js
+      - ./.env:/usr/src/app/.env
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - .env
+    depends_on:
+      dbbookinghall:
+        condition: service_healthy
+    networks:
+      - bookinghallnetwork
+
+  dbbookinghall:
+    image: mysql:8.0
+    container_name: dbbookinghall
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: \${DB_NAME}
+      MYSQL_USER: \${DB_USERNAME}
+      MYSQL_PASSWORD: \${DB_PASSWORD}
+    volumes:
+      - bookinghall-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+      interval: 5s
+    networks:
+      - bookinghallnetwork
+
+volumes:
+  bookinghall-data:
+
+networks:
+  bookinghallnetwork:
+    driver: bridge
