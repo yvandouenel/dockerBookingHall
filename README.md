@@ -84,8 +84,8 @@ docker-compose exec appBookingHall bash
 docker-compose exec dbbookinghall mysql -u admin -p bookinghalldb
 ```
 Mot de passe : 123ABc;#789
-
-# Test de login avec l'admin :
+# Utilisation des différents endpoint
+## Test de login avec l'admin :
 
 ```bash
 curl -X POST http://localhost:3000/api/auth/login \
@@ -99,8 +99,30 @@ Cela doit renvoyer une réponse avec un token. Ex :
 ```bash
 {"uid":1,"login":"admin@bookinghall.com","role":"admin","accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczNzk5MjIzMSwiZXhwIjoxNzM4MDc4NjMxfQ.TjeL-Bn2ZKcwdaeaYzVPM3krgMNxJ3zhB-y0BrfZXws"}
 ```
-
-# Créer une réservation :
+## Créer un nouvel utilisateur :
+```bash
+curl -X POST http://localhost:3000/api/auth/signup \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczODA1NDczMSwiZXhwIjoxNzM4MTQxMTMxfQ._vn8JMXtM7pkxQCK9ZIH_yOCHoQi4mWjBnhLEnVlaxQ" \
+-d '{
+    "login": "user@bookinghall.com",
+    "pwd": "User123!@#",
+    "role": "user",
+    "firstname": "John",
+    "lastname": "Doe",
+    "phone": "0123456789"
+}'
+```
+## Modifier un utilisateur
+```bash
+curl -X PUT http://localhost:3000/api/auth/users/user@bookinghall.com \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczODA1NDczMSwiZXhwIjoxNzM4MTQxMTMxfQ._vn8JMXtM7pkxQCK9ZIH_yOCHoQi4mWjBnhLEnVlaxQ" \
+-d '{
+    "phone": "0033661487859"
+}'
+````
+## Créer une réservation :
 ```bash
 curl -X POST http://localhost:3000/api/bookings \
 -H "Content-Type: application/json" \

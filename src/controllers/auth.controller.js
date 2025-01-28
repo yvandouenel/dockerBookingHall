@@ -48,3 +48,38 @@ export const login = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+
+export const updateUser = async (req, res) => {
+    try {
+        const user = await User.findOne({ where: { login: req.params.email } });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Vérifier les permissions
+        if (req.user.role !== 'admin' && req.user.uid !== user.uid) {
+            return res.status(403).json({ message: "Not authorized" });
+        }
+
+        // Seul un admin peut modifier le rôle
+        if (req.body.role && req.user.role !== 'admin') {
+            delete req.body.role;
+        }
+
+        await user.update(req.body);
+        res.json({
+            message: "User updated successfully", user: {
+                uid: user.uid,
+                login: user.login,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                phone: user.phone,
+                role: user.role
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

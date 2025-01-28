@@ -8,6 +8,7 @@ const router = Router();
 // Routes d'authentification
 router.post('/auth/signup', verifyToken, isAdmin, authController.signup);
 router.post('/auth/login', authController.login);
+router.put('/auth/users/:email', verifyToken, authController.updateUser);
 
 // Routes de réservation
 router.post('/bookings', verifyToken, bookingController.createBooking);

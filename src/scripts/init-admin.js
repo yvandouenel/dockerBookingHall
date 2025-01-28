@@ -9,9 +9,9 @@ const User = db.users;
 const initAdmin = async () => {
     try {
         const adminExists = await User.findOne({ where: { role: 'admin' } });
-        
+
         if (!adminExists) {
-            const hashedPassword = await bcrypt.hash('Admin123!@#', 10);
+            const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
             await User.create({
                 login: 'admin@bookinghall.com',
                 pwd: hashedPassword,
