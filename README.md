@@ -3,7 +3,6 @@
 Application test de réservation de salle en créant des containers docker avec l'architecture suivante : 
 * un container appbookinghall qui utilise Nodejs/express/Sequelize
 * un container dbbookinghall qui utilise mysql
- ./src:/usr/src/app/src
 
 * Volumes "mappés" et volume anonyme
   - Le dossier ./src de l'host est mappé avec /usr/src/app/src du conteneur
@@ -11,7 +10,7 @@ Application test de réservation de salle en créant des containers docker avec 
   - Le fichier  ./.env de l'host est mappé avec /usr/src/app/.env du conteneur
   - un volume anonyme qui correspond au répertoire /usr/src/app/node_modules est créé afin d'éviter que le dossier node_modules du conteneur soit écrasé par celui de l'host
 
-* un réseau docker todoListNetwork qui permettra aux conteneurs de communiquer entre eux
+* un réseau docker bookinghallNetwork qui permettra aux conteneurs de communiquer entre eux
 * Le tout est orchestré par un fichier docker-compose.yml
 * un fichier db.config.js permet de d'utiliser les variables issues de du fichier .env
 * un fichier .env.sample sert de base à copier dans un fichier .env (qui sera ignoré par git)
