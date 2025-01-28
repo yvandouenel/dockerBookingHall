@@ -27,9 +27,9 @@ services:
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: bookinghalldb
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: 123ABc;#789
+      MYSQL_DATABASE:  ${DB_NAME}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - bookinghall-data:/var/lib/mysql
     ports:
