@@ -33,7 +33,7 @@ services:
     volumes:
       - bookinghall-data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"  # Changé de 3306:3306 à 3307:3306
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
       interval: 5s
