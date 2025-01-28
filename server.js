@@ -13,7 +13,7 @@ const corsOptions = {
     origin: function (origin, callback) {
         // En développement, on accepte toutes les origines
         callback(null, true);
-        // En production, vous devriez spécifier les domaines autorisés :
+        // En production, on peut (doit) spécifier les domaines autorisés :
         // const allowedOrigins = ['http://votre-frontend.com'];
         // if (!origin || allowedOrigins.indexOf(origin) !== -1) {
         //     callback(null, true);
@@ -26,6 +26,7 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization']
 };
 
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -36,7 +37,7 @@ app.use('/api', routes);
 // Gestion des erreurs
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).json({ 
+    res.status(500).json({
         message: 'Something broke!',
         error: process.env.NODE_ENV === 'development' ? err.message : {}
     });

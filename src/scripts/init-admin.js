@@ -13,7 +13,7 @@ const initAdmin = async () => {
         if (!adminExists) {
             const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
             await User.create({
-                login: 'admin@bookinghall.com',
+                login: process.env.ADMIN_LOGIN,
                 pwd: hashedPassword,
                 role: 'admin',
                 firstname: 'Admin',
