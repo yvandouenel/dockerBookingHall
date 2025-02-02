@@ -13,6 +13,7 @@ router.put('/auth/users/:email', verifyToken, authController.updateUser);
 // Routes de réservation
 router.post('/bookings', verifyToken, bookingController.createBooking);
 router.get('/bookings/monthly', verifyToken, bookingController.getMonthlyBookings);
-router.put('/bookings/:bid', verifyToken, bookingController.updateBooking);
+//router.put('/bookings/:bid', verifyToken, bookingController.updateBooking);
+router.put('/bookings/:bid', bookingController.updateBooking);
 
 export default router;
