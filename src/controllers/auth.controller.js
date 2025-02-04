@@ -48,7 +48,22 @@ export const login = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+export const getAllUsers = async (req, res) => {
+    try {
+        // Vérifier si l'utilisateur est admin
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: "Not authorized - Admin access required" });
+        }
 
+        const users = await User.findAll({
+            attributes: ['uid', 'login', 'firstname', 'lastname', 'phone', 'role']
+        });
+
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
 
 export const updateUser = async (req, res) => {
     try {
