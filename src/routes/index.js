@@ -9,6 +9,7 @@ const router = Router();
 router.post('/auth/signup', verifyToken, isAdmin, authController.signup);
 router.post('/auth/login', authController.login);
 router.put('/auth/users/:email', verifyToken, authController.updateUser);
+router.delete('/auth/users/:email', verifyToken, authController.deleteUser);
 router.get('/auth/users', verifyToken, authController.getAllUsers);
 
 // Routes de réservation
