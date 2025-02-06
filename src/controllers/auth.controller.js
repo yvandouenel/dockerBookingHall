@@ -82,6 +82,10 @@ export const updateUser = async (req, res) => {
         if (req.body.role && req.user.role !== 'admin') {
             delete req.body.role;
         }
+        // Hachage du pwd
+        if(req.body.pwd) {
+            req.body.pwd = await bcrypt.hash(req.body.pwd, 10);
+        }
 
         await user.update(req.body);
         res.json({
