@@ -14,8 +14,31 @@ export const createBooking = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
-
 export const getMonthlyBookings = async (req, res) => {
+    const { year, month } = req.query;
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0);
+
+    try {
+        const bookings = await Booking.findAll({
+            where: {
+                start_date: {
+                    [Op.between]: [startDate, endDate]
+                }
+            },
+            include: [{
+                model: db.users,
+                as: 'user',
+                attributes: ['firstname', 'lastname', 'login', 'phone']
+            }]
+        });
+        res.json(bookings);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const getMonthlyBookingsPrivate = async (req, res) => {
     const { year, month } = req.query;
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0);
@@ -51,7 +74,7 @@ export const updateBooking = async (req, res) => {
     const { bid } = req.params;
     try {
         const booking = await Booking.findByPk(bid);
-        
+
         if (!booking) {
             return res.status(404).json({ message: "Booking not found" });
         }

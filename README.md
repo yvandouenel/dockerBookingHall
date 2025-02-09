@@ -149,3 +149,7 @@ curl -X POST http://localhost:3000/api/bookings \
     "paid": false
 }'
 ```
+## Voir les réservations 
+```bash
+curl "http://localhost:3000/api/bookings/monthly?year=2025&month=2"
+```
