@@ -17,5 +17,6 @@ router.post('/bookings', verifyToken, bookingController.createBooking);
 router.get('/bookings/monthly', bookingController.getMonthlyBookings);
 //router.put('/bookings/:bid', verifyToken, bookingController.updateBooking);
 router.put('/bookings/:bid', verifyToken, bookingController.updateBooking);
+router.delete('/bookings/:bid', verifyToken, bookingController.deleteBooking);
 
 export default router;

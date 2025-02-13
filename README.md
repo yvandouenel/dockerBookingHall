@@ -153,3 +153,10 @@ curl -X POST http://localhost:3000/api/bookings \
 ```bash
 curl "http://localhost:3000/api/bookings/monthly?year=2025&month=2"
 ```
+## Supprimer une réservation
+```bash
+curl -X DELETE http://localhost:3000/api/bookinks/3\
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczODA1NDczMSwiZXhwIjoxNzM4MTQxMTMxfQ._vn8JMXtM7pkxQCK9ZIH_yOCHoQi4mWjBnhLEnVlaxQ" \
+
+````

@@ -89,3 +89,27 @@ export const updateBooking = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+export const deleteBooking = async (req, res) => {
+    const { bid } = req.params;
+    try {
+        const booking = await Booking.findByPk(bid);
+
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" });
+        }
+
+        // Vérifier les permissions
+        if (booking.uid !== req.user.uid && req.user.role !== 'admin') {
+            return res.status(403).json({ message: "Not authorized" });
+        }
+
+        await booking.destroy();
+        res.json({
+            message: "Booking deleted successfully", booking: {
+                bid: booking.uid
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
