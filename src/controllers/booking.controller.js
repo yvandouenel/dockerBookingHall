@@ -30,7 +30,10 @@ export const getMonthlyBookings = async (req, res) => {
                 model: db.users,
                 as: 'user',
                 attributes: ['firstname', 'lastname', 'login', 'phone']
-            }]
+            }],
+            order: [
+                ['start_date', 'ASC']
+            ]
         });
         res.json(bookings);
     } catch (err) {
