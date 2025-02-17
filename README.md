@@ -149,7 +149,7 @@ curl -X POST http://localhost:3000/api/bookings \
     "paid": false
 }'
 ```
-## Voir les réservations 
+## Voir les réservations pour un mois donné
 ```bash
 curl "http://localhost:3000/api/bookings/monthly?year=2025&month=2"
 ```
@@ -159,4 +159,19 @@ curl -X DELETE http://localhost:3000/api/bookinks/3\
 -H "Content-Type: application/json" \
 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczODA1NDczMSwiZXhwIjoxNzM4MTQxMTMxfQ._vn8JMXtM7pkxQCK9ZIH_yOCHoQi4mWjBnhLEnVlaxQ" \
 
+````
+
+## Modifier une réservation
+```bash
+curl -X PUT http://localhost:3000/api/bookings/1 \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczNzk5MzA0NSwiZXhwIjoxNzM4MDc5NDQ1fQ.rHlJIJKj7DqyNhIt7uMdczWh__w_j1Td5ecZ_GlI58w" \
+-d '{
+    "title": "Réunion test 1",
+    "description": "Test de la première réservation",
+    "start_date": "2025-01-27T14:00:00",
+    "end_date": "2025-01-27T16:00:00",
+    "private": false,
+    "paid": false
+}'
 ````
