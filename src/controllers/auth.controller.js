@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import db from '../models/index.js';
+import { validatePassword } from '../middleware/auth.js';
 
 const User = db.users;
 
@@ -32,8 +33,16 @@ export const login = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
+        // Vérifier si le mot de passe respecte les règles de sécurité
+        const passwordCheck = validatePassword(req.body.pwd);
+        const requiresPwdChange = !passwordCheck.isValid;
+
         const token = jwt.sign(
-            { uid: user.uid, role: user.role },
+            { 
+                uid: user.uid, 
+                role: user.role,
+                requiresPwdChange: requiresPwdChange 
+            },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRATION }
         );
@@ -45,12 +54,14 @@ export const login = async (req, res) => {
             lastname: user.lastname,
             phone: user.phone,
             role: user.role,
-            accessToken: token
+            accessToken: token,
+            requiresPwdChange: requiresPwdChange,
+            passwordIssues: requiresPwdChange ? passwordCheck.reasons : null
         });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-};
+};  
 export const getAllUsers = async (req, res) => {
     try {
         // Vérifier si l'utilisateur est admin
@@ -71,7 +82,7 @@ export const getAllUsers = async (req, res) => {
 export const updateUser = async (req, res) => {
     try {
         const user = await User.findOne({ where: { login: req.params.email } });
-
+        
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -85,21 +96,55 @@ export const updateUser = async (req, res) => {
         if (req.body.role && req.user.role !== 'admin') {
             delete req.body.role;
         }
-        // Hachage du pwd
-        if(req.body.pwd) {
-            req.body.pwd = await bcrypt.hash(req.body.pwd, 10);
+
+        let requiresPwdChange = false;
+
+        // Si un nouveau mot de passe est fourni
+        if (req.body.pwd) {
+            if (req.user.role === 'admin') {
+                // L'admin peut définir n'importe quel mot de passe
+                // Mais l'utilisateur devra le changer
+                requiresPwdChange = true;
+                req.body.pwd = await bcrypt.hash(req.body.pwd, 10);
+            } else {
+                // Pour les utilisateurs normaux, vérifier les critères de sécurité
+                const passwordCheck = validatePassword(req.body.pwd);
+                
+                if (!passwordCheck.isValid) {
+                    return res.status(400).json({
+                        message: "Password does not meet security requirements",
+                        issues: passwordCheck.reasons
+                    });
+                }
+                req.body.pwd = await bcrypt.hash(req.body.pwd, 10);
+            }
         }
 
         await user.update(req.body);
+
+        // Générer un nouveau token
+        const token = jwt.sign(
+            { 
+                uid: user.uid, 
+                role: user.role,
+                requiresPwdChange: requiresPwdChange
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRATION }
+        );
+
         res.json({
-            message: "User updated successfully", user: {
+            message: "User updated successfully",
+            user: {
                 uid: user.uid,
                 login: user.login,
                 firstname: user.firstname,
                 lastname: user.lastname,
                 phone: user.phone,
                 role: user.role
-            }
+            },
+            accessToken: token,
+            requiresPwdChange: requiresPwdChange
         });
     } catch (err) {
         res.status(500).json({ message: err.message });

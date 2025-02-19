@@ -25,3 +25,26 @@ export const isAdmin = (req, res, next) => {
     }
     next();
 };
+// Valider le format du mot de passe
+export const validatePassword = (password) => {
+    const minLength = 10;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    
+    return {
+        isValid: password.length >= minLength && 
+                hasUpperCase && 
+                hasLowerCase && 
+                hasNumbers && 
+                hasSpecialChar,
+        reasons: {
+            length: password.length < minLength,
+            upperCase: !hasUpperCase,
+            lowerCase: !hasLowerCase,
+            numbers: !hasNumbers,
+            specialChar: !hasSpecialChar
+        }
+    };
+};
