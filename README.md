@@ -175,3 +175,21 @@ curl -X PUT http://localhost:3000/api/bookings/1 \
     "paid": false
 }'
 ````
+# Exports
+```bash
+drush scr export_users.php
+drush scr export_events.php
+```
+# Imports
+## fichier json
+Les fichiers suivants servent à l'import :
+ - src/scripts/users_export.json
+ - src/scripts/events_export.json
+ ## lancer les imports
+
+```bash
+  docker exec -it appbookinghall node src/scripts/import-users.js
+```
+```bash
+  docker exec -it appbookinghall node src/scripts/import-bookings.js
+```

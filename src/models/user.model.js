@@ -19,18 +19,21 @@ export default (sequelize, DataTypes) => {
         },
         role: {
             type: DataTypes.ENUM('user', 'admin'),
-            defaultValue: 'user'
+            defaultValue: 'user',
+            allowNull: true
         },
         firstname: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         lastname: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         phone: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: '',
         }
     });
     return User;
